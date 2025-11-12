@@ -16,11 +16,10 @@ const createRow = todo => `
 
 const loadTodos = async () => {
     try {
-        const res = await fetch(apiUrl);
-        const todos = await res.json();
+       const res = await axios.get(apiUrl);
 
         document.getElementById("todoTableBody").innerHTML =
-            todos.map(createRow).join(""); 
+            res.data.map(createRow).join(""); 
     } catch (err) {
         console.error("Lỗi khi lấy dữ liệu:", err);
     }
@@ -28,7 +27,7 @@ const loadTodos = async () => {
 
 
 const deleteTodo = async id => {
-    await fetch(`${apiUrl}/${id}`, { method: "DELETE" });
+    await axios.delete(`${apiUrl}/${id}`);
     loadTodos();
 };
 
@@ -36,8 +35,8 @@ const deleteTodo = async id => {
 const updateModal = new bootstrap.Modal(document.getElementById('updateModal'));
 const Update = async id =>{
     try {
-        const res = await fetch(`${apiUrl}/${id}`);
-        const todo = await res.json();
+        const res = await axios.get(`${apiUrl}/${id}`);
+        const todo = res.data;
 
         document.getElementById("updateId").value = todo.id;
         document.getElementById("updateTitle").value = todo.title;
@@ -52,15 +51,14 @@ const Update = async id =>{
 document.getElementById("updateForm").addEventListener("submit" , async e =>{
     e.preventDefault();
     const id = document.getElementById("updateId").value;
-    const title = document.getElementById("updateTitle").value.trim();
-    const isDone = document.getElementById("updateIsDone").checked;
-    if(!title) return alert("Tieu de khong duoc de rong ! ");
+    const updatedata = {
+        title : document.getElementById("updateTitle").value.trim(),
+        isDone : document.getElementById("updateIsDone").checked
+    }
+   
+    if(!updatedata.title) return alert("Tieu de khong duoc de rong ! ");
     try {
-        await fetch(`${apiUrl}/${id}` , {
-            method : "PUT",
-            headers: {"Content-Type" : "application/json"},
-            body : JSON.stringify({title , isDone})
-        });
+        await axios.put(`${apiUrl}/${id}`, updatedata);
         updateModal.hide();
         loadTodos();
     } catch (error) {

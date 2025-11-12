@@ -5,11 +5,7 @@ document.getElementById("createForm").addEventListener("submit",async e=>{
     const isDone = document.getElementById("isDone").checked;
     if(!title) return alert("Title is not empty ! ");
     try {
-        await fetch(apiUrl , {
-            method: "POST",
-            headers: {"Content-Type" : "application/json"},
-            body: JSON.stringify({title,isDone})
-        });
+        await axios.post(apiUrl , {title , isDone});
         window.location.href = "demo.html";
     } catch (error) {
         console.error("Loi khi khoi tao todo : " , error);
