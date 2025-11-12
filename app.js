@@ -5,7 +5,7 @@ const createRow = todo => `
     <tr>
         <td>${todo.id}</td>
         <td>${todo.title}</td>
-        <td>${todo.isDone ? "✅" : "❌"}</td>
+        <td>${todo.isDone ? "Hoàn Thành" : "Chưa Hoàn Thành"}</td>
         <td>
             <button class="btn btn-danger" onclick="deleteTodo(${todo.id})">Xóa</button>
             <button class="btn btn-secondary" onclick="Update(${todo.id})">Sửa</button>
